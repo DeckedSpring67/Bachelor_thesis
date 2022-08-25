@@ -1,0 +1,34 @@
+\begin{titlepage} %\title{
+%
+   \begin{flushright}
+      {\includegraphics[width=1cm]{images/placeholder.eps} }
+      \mbox{}\vspace{3cm}\
+      {\Huge \sf \bf \flushright
+         \GMTitle{} % titolo
+      }
+      \rule[-1mm]{\textwidth}{2mm}\\
+     {{\ifthenelse{\equal{\GMSubtitle}{}}
+        { \mbox{}\\ }% sottotitolo vuoto
+        { {\Large \sf \bf  \GMSubtitle{} \\ }} % sottotitolo
+     }}%
+%      {\Large \sf \bf
+%        \Sottotitolo{}  \\ % sottotitolo  \\
+%      }
+       \vspace{6cm}
+       {{\ifthenelse{\equal{\GMAuthor}{}}
+        { \mbox{}\\ }% \Author vuoto
+        { {\Large \sf   \GMAuthor{} \\ }} % autore
+     }}
+%      {  \large  \sf
+%       \Autore{} \\ 
+%      }
+   \end{flushright}
+   \vspace{5cm}
+   \begin{flushleft} {
+       \large \sf \em
+       \GMDate{} 
+   %{\includegraphics[width=1cm]{images/placeholder.eps} }
+   }
+   \end{flushleft}
+\CoverEnd % nessuna numerazione, pagina bianca
+\end{titlepage}%} % end title
