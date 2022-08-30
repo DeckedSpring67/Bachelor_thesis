@@ -420,12 +420,19 @@ To verify if SSL Decryption is working correctly, after connecting to an HTTPS e
 \begin{figure}[!h]
 \centering
  \includegraphics[width=13cm]{img/ssl_inspection_result.png}
-	\caption{The }\label{SSL Inspection Page}
+	\caption{The SSL Inspection Captive portal }\label{SSL Inspection Page}
 \end{figure}
 
 It is also possible to look at the certificate used to decrypt the web page and verify that its Certificate Authority is the same as the one that was generated through the Firewall
 
-Screenshot here
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=13cm]{img/pa_certificate.png}
+ % pa_certificate.png: 771x280 px, 96dpi, 20.40x7.41 cm, bb=
+ \caption{The Palo Alto Generated Certificate on a foreign web page}
+ \label{fig: PaloAlto certificate}
+\end{figure}
+
 
 \pagebreak
 
