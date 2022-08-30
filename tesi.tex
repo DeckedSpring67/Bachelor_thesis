@@ -1,6 +1,6 @@
-\documentclass[status=normal,cover=tesi,language=en]{gmeepd}
+%\documentclass[status=normal,cover=tesi,language=en]{gmeepd}
 
-\ShowDraft 
+%\ShowDraft 
 
 % --- definizione copertina ---------------------------------------------------------------
 %% definizione elementi che compongono la copertina
@@ -8,17 +8,19 @@
 %\renewcommand{\CoverType}{elaborato}
 % default elaborato, altri possibili: tesina, tesi, tesiphd, dispensa, libro
 
-\Author{Marco Martini}
-\Title{Managing Security of Computer Network Applications using Encryption Techniques}
-%\Subtitle{tesi}
-\Advisor{ Professor Dr. Ing. Nicola Laurenti}
-\CoAdvisor{Professor Dr. Ing. Alexandru Soceanu}
-\Course{corso di laurea in Ingegneria Informatica}
-\Date{\today}   % default=\today
+\input{model/Modello_tesi}
 
-% -------------------------------------------------------------------------------------------
+%\Author{Marco Martini}
+%\Title{Managing Security of Computer Network Applications using Encryption Techniques}
+%%\Subtitle{tesi}
+%\Advisor{ Professor Dr. Ing. Nicola Laurenti}
+%\CoAdvisor{Professor Dr. Ing. Alexandru Soceanu}
+%\Course{corso di laurea in Ingegneria Informatica}
+%\Date{\today}   % default=\today
 
-\makeindex % chiede a LaTeX di creare l'indice analitico, la stampa (opzionale) avviene in fondo
+
+
+%\makeindex % chiede a LaTeX di creare l'indice analitico, la stampa (opzionale) avviene in fondo
 
 \usepackage{glossaries}
 \usepackage[skip=1ex]{caption}
@@ -34,7 +36,45 @@
 
 \begin{document}
 
-\Cover    % copertina
+% ------- Copertina ---------------
+\begin{titlepage}
+\begin{center}
+\includegraphics[scale=0.1]{images/logo.png}\\
+
+%Per il frontespizio del dipartimenti di Ing. dell'Informazione commentare le riga precedente e decommentare la successiva
+%\includegraphics[scale=0.2]{images/logo_unipd.png} \hfill \includegraphics[scale=0.2]{images/logo_dei.png}\\
+\vspace{0.8cm}
+\textsc{\LARGE Universit\`{a} degli Studi di Padova}\\
+\vspace{0.45cm}
+\textsc{\large Dipartimento di Ingegneria dell'Informazione}\\
+\vspace{0.4cm}
+\textsc{\large Corso di Laurea Magistrale in}\\
+\textsc{\large Ingegneria Informatica}\\
+\vfill
+% Title
+{ \LARGE \bfseries Managing Security of Computer Network Applications using Encryption Techniques
+}\\
+\vfill
+\textit{\large Advisor:} \hfill \textit{\large Candidate:}\\
+\textsc{\large Prof. Nicola Laurenti} \hfill \textsc{\large Marco Martini}\\
+\textit{\large Co-Advisor:} \hfill \textsc{\large 1189321}\\
+\textsc{\large Prof. Dr-Ing Alexandru Soceanu} \hfill \textsc{}
+
+\vfill
+% Bottom of the page
+{\large Anno Accademico 2021/2022}
+\end{center}
+\end{titlepage}
+
+\thispagestyle{empty} %pagina bianca dopo il titolo
+\cleardoublepage
+
+
+% -------------------------------------------------------------------------------------------
+
+
+
+%\Cover    % copertina
 
 \tableofcontents
 
@@ -114,7 +154,7 @@ Even if a Traditional Firewall is aware of the state of the connection, the data
  \item When the flow is being closed
 \end{itemize}
 
-\pagebreak
+\newpage
 
 A Next Generation Firewall does everything a Traditional Firewall can and more by using AI enhanced algorithms  and by using the Cloud as to always be up to date with new threats and malware.
 
@@ -129,7 +169,7 @@ In order for a Firewall to be classified as ``New Generation'' it must provide(s
  \item Techniques to address evolving security threats
 \end{itemize}
 
-\pagebreak
+\newpage
 
 \subsection{Palo Alto Firewalls}
 
@@ -153,7 +193,7 @@ Other than the mandatory NGFW features, Palo Alto's Firewall solutions provide m
 
 This paper will cover the Threat analysis feature of this platform enhanced by the decryption of SSL/TLS packets.
 
-\pagebreak
+\newpage
 
 \section{SSL/TLS Decryption}
 
@@ -169,7 +209,7 @@ They are present between the Application Layer and the Transport Layer in the TC
 \end{figure}
 
 
-\pagebreak
+\newpage
 
 In order for the two parties to communicate, an SSL/TLS Handshake must be performed first.
 
@@ -200,7 +240,7 @@ The server establishes a handshake with the firewall acting as a client and the 
  \label{SSL Forward Diagram}
 \end{figure}
 
-\pagebreak
+\newpage
 
 \section{Malware Detection in Firewalls}
 
@@ -226,7 +266,7 @@ It also provide an automatic certificate installation for `nginx` and `Apache`, 
 
 Since SSL Decryption is just a Man in The Middle implementation, the web client must trust the firewall before the website, so if not careful an user can be a victim of another MITM implementation.
 
-\pagebreak
+\newpage
 
 \subsection{ARP Spoofing}
 
@@ -245,7 +285,7 @@ Since ARP, Address Resolution Protocol, is used to associate a network device MA
  \label{fig: ARP Spoofing}
 \end{figure}
 
-\pagebreak
+\newpage
 
 \subsection{HTTPS Proxy}
 
@@ -314,7 +354,7 @@ The 2 clients have different purposes, one will be used as a standard client and
 
 
 
-\pagebreak
+\newpage
 
 \section{Setting up the Firewall}
 
@@ -364,7 +404,7 @@ Since the hosts outside of the internal network have no way to know where the so
 \end{figure}
 
 
-\pagebreak
+\newpage
 
 \section{Setting up Decryption}
 
@@ -383,7 +423,7 @@ In order to do that we must generate our self signed certificate, and enable the
  \caption{SSL/TLS Certificates configuration in PanOS}\label{Certificates}
 \end{figure}
 
-\pagebreak
+\newpage
 
 After the Certificate Generation we need to have a working Decryption Profile, Palo Alto Firewall provides by default a working one but one could create a customised one if needed.
 
@@ -393,7 +433,7 @@ After the Certificate Generation we need to have a working Decryption Profile, P
     	\caption{A few of the many options configurable for Decryption}\label{Decryption Options}
 \end{figure}
 
-\pagebreak
+\newpage
 
 Finally we can create a Decryption Policy, as with every other Firewall Policy, the source and Destination traffic must be selected, in this case any type of traffic, and then the decryption policy option, there are 3 types of Decryption available in Palo Alto FW: \verb|SSL Forward Proxy|, \verb|SSL Inbound Inspection|, \verb|SSH Proxy|
 
@@ -413,7 +453,7 @@ It's also possible to define some exceptions where the website included in it wo
 	\caption{A list of Decryption Exceptions}\label{Decryption Exceptions}
 \end{figure}
 
-\pagebreak
+\newpage
 
 To verify if SSL Decryption is working correctly, after connecting to an HTTPS enabled website, this Captive Portal web page should show up before being able to connect.
 
@@ -427,7 +467,7 @@ It is also possible to look at the certificate used to decrypt the web page and 
 
 Screenshot here
 
-\pagebreak
+\newpage
 
 \section{Setting up Malware Protection}
 
@@ -435,7 +475,7 @@ TODO
 
 \section{Testing the Setup}
 
-\pagebreak
+\newpage
 
 \section{Setting up the Network Attack}
 
@@ -457,7 +497,7 @@ After launching it we can look at the various features through the \verb|help| c
 
 Every tool is called a caplet, we'll be using the ``https.proxy'' and ``arp.spoof'' caplets.
 
-\pagebreak
+\newpage
 
 \subsection{Setting up ARP Spoofing}
 
@@ -486,7 +526,7 @@ The results in the victim are the following:
  \caption{The result of ARP Spoofing/Poisoning}\label{fig: spoof-before-after}
 \end{figure}
 
-\pagebreak
+\newpage
 
 Since the Gateway now points to the Attacker machine, the traceroute output is also changed:
 
@@ -528,7 +568,7 @@ The available options are:
 
 As mentioned earlier in the paper, the certificate can be forged meticulously to look like a big corporation's one.
 
-\pagebreak
+\newpage
 
 \subsubsection{Developing the Script}
 
@@ -566,7 +606,7 @@ function onCommand(cmd) {
 }
 \end{verbatim}
 
-\pagebreak
+\newpage
 
 In this case in order to bypass the Malware Detection in ``PanOS'', a small script was created that replaces the url of the malware on the external server with the url of the same malware but located on the attacker's machine.
 
@@ -590,7 +630,7 @@ function onResponse(req, res){
  \label{fig: flowchart}
 \end{figure}
 
-\pagebreak
+\newpage
 
 \subsubsection{Testing the Proxy}
 
@@ -617,7 +657,7 @@ And by Clicking the link the download will start as envisioned.
 This way the victim is downloading a malware by completely bypassing the Malware Detection system in the firewall.
 
 
-\pagebreak
+\newpage
 
 \section{Mitigating the Attack}
 
@@ -625,16 +665,21 @@ This way the victim is downloading a malware by completely bypassing the Malware
 \chapter{Results and discussion}
 \section{Conclusions}
 
+\newpage
+\cleardoublepage
+
 \addcontentsline{toc}{chapter}{Bibliography}
 \bibliography{bib/bib-latex,bib/bib-sample}
 \bibliographystyle{ieeetr} % acm siam abbrv plain, alpha, abbrv, ieeetr
 
+\newpage
+\cleardoublepage
 % --- list of tables and figures (indice delle tabelle, figure) ------------
 \addcontentsline{toc}{chapter}{\listfigurename}
-\ListOfFigures  % genera elenco e aggiunge voce all'indice(nella lingua corretta)
+\listoffigures% genera elenco e aggiunge voce all'indice(nella lingua corretta)
 
 
-\PrintIndex % genera indice analitico, aggiunge voce all'indice (nella lingua corretta)
+%\PrintIndex % genera indice analitico, aggiunge voce all'indice (nella lingua corretta)
 %\clearpage \addcontentsline{toc}{chapter}{Indice analitico} \printindex
 
 
