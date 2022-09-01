@@ -244,7 +244,7 @@ This paper will cover the Threat analysis feature of this platform enhanced by t
 
 \newpage
 
-\section{\glsxtrshort{ssl}/\glsxtrshort{tls} Decryption}
+\section{SSL/TLS Decryption}
 
 \glsxtrfull{ssl} and \glsxtrfull{tls} protocols are the most used protocols to provide secure communication over the internet.
 
@@ -266,8 +266,7 @@ In order for the two parties to communicate, an \glsxtrshort{ssl}/\glsxtrshort{t
 \begin{figure}[!hb]
  \centering
  \includegraphics[width=13cm]{img/ssl_handshake.png}
- \caption{Overview of the \glsxtrshort{ssl} or \glsxtrshort{tls} handshake}
- \caption*{Source: https://www.ibm.com/docs/en/ibm-mq/7.5?topic=ssl-overview-tls-handshake}
+ \caption{Overview of the \glsxtrshort{ssl} or \glsxtrshort{tls} handshake\cite{ibm-handshake}}
  \label{SSL handshake}
 \end{figure}
 
@@ -284,8 +283,8 @@ The server establishes a handshake with the firewall acting as a client and the 
 \begin{figure}[!hb]
  \centering
  \includegraphics[width=13cm]{img/ssl_decryption_diagram.png}
- \caption{\glsxtrshort{ssl} Forward Proxy Diagram}
- \caption*{Source: https://www.ibm.com/docs/en/ibm-mq/7.5?topic=ssl-overview-tls-handshake}
+ \caption{\glsxtrshort{ssl} Forward Proxy Diagram\cite{ibm-handshake}}
+% \caption*{Source: https://www.ibm.com/docs/en/ibm-mq/7.5?topic=ssl-overview-tls-handshake}
  \label{SSL Forward Diagram}
 \end{figure}
 
@@ -301,7 +300,7 @@ Traditional Firewalls used to only be able to inspect a flow of non-encrypted da
 
 Through \glsxtrshort{ngfw}s Malware signatures can be constantly updated through the Cloud and instead of comparing hashes, the threat prevention in this new technology can analyse the payload itself, even if compressed or comes from an encrypted source such as \glsxtrshort{https}.
 
-\section{\glsxtrshort{https} Server with Let's Encrypt}
+\section{HTTPS  Server with Let's Encrypt}
 
 The \glsxtrshort{https} protocol is a secure version of the HTTP, to make it secure, \glsxtrshort{ssl}/\glsxtrshort{tls} certificates must be installed into the server that deploys it.
 
@@ -317,7 +316,7 @@ Since \glsxtrshort{ssl} Decryption is just a Man in The Middle implementation, t
 
 \newpage
 
-\subsection{\glsxtrshort{arp} Spoofing}
+\subsection{ARP Spoofing}
 
 In order to deploy a successful \glsxtrshort{mitm} attack the user must connect to the Attacker machine first.
 
@@ -329,14 +328,13 @@ Since \glsxtrfull{arp} is used to associate a network device MAC address with it
  \centering
  \includegraphics[width=13cm]{img/ARP_Spoofing.png}
  % ARP_Spoofing.png: 1005x768 px, 72dpi, 35.45x27.09 cm, bb=
- \caption{A successful \glsxtrshort{arp} spoofing (poisoning) attack allows an attacker to alter routing on a network, effectively allowing for a man-in-the-middle attack}
- \caption*{Source: https://en.wikipedia.org/wiki/ARP\_spoofing}
+ \caption{A successful \glsxtrshort{arp} spoofing (poisoning) attack allows an attacker to alter routing on a network, effectively allowing for a man-in-the-middle attack\cite{arp-spoofing}}
  \label{fig: ARP Spoofing}
 \end{figure}
 
 \newpage
 
-\subsection{\glsxtrshort{https} Proxy}
+\subsection{HTTPS Proxy}
 
 An \glsxtrshort{https} proxy is a server application that acts as an intermediary between a client and a \glsxtrshort{ssl} encrypted website.
 
@@ -647,7 +645,7 @@ In our case we'll use it to create the \glsxtrshort{arp} Spoof attack.
 
 \newpage
 
-\subsection{Setting up \glsxtrshort{arp} Spoofing}
+\subsection{Setting up ARP Spoofing}
 
 First of all we need to write our python script to make use of scapy.
 
@@ -765,7 +763,7 @@ Since the Gateway now points to the Attacker machine, the traceroute output is a
 \newpage
 
 
-\subsection{Setting up the \glsxtrshort{https} Proxy}
+\subsection{Setting up the HTTPS Proxy}
 
 After starting \verb|bettercap| as root, we can start using the \glsxtrshort{https} Proxy tool, the available options are:
 
@@ -776,7 +774,7 @@ After starting \verb|bettercap| as root, we can start using the \glsxtrshort{htt
  \item \verb|https.proxy.certificate| : \glsxtrshort{https} proxy certification authority \glsxtrshort{tls} certificate file. (default=~/.bettercap-ca.cert.pem)
  \item \verb|https.proxy.certificate.bits| : Number of bits of the RSA private key of the generated \glsxtrshort{https} certificate. (default=4096)
  \item \verb|https.proxy.certificate.commonname| : Common Name field of the generated \glsxtrshort{https} certificate. (default=Go Daddy Secure Certificate Authority - G2)
- \item \verb|https.proxy.certificate.country| : Country field of the generated \glsxtrshort{https} certificate. (default=US)
+ \item \verb|https.proxy.certificate.country| : Country field of the generated \\ \glsxtrshort{https} certificate. (default=US)
  \item \verb|https.proxy.certificate.locality| : Locality field of the generated \\ \glsxtrshort{https} certificate. (default=Scottsdale)
  \item \verb|https.proxy.certificate.organization| : Organization field of the generated \\ \glsxtrshort{https} certificate. (default=GoDaddy.com, Inc.)
  \item \verb|https.proxy.certificate.organizationalunit| : Organizational Unit field of the generated \glsxtrshort{https} certificate. \newline(default=https://certs.godaddy.com/repository/)
@@ -948,7 +946,7 @@ After generating a \glsxtrfull{pki} with the command \\
 \verb|easyrsa init-pki|, we can put our glsxtrshort{panos} certificate and private key respectively in the \verb|pki/| and \verb|pki/private| folders. Once done, we can generate the server public/private keys with \verb|easyrsa gen-req vpnserver nopass|  and \\
 \verb|easyrsa gen-req vpnclient nopass| (the \verb|nopass| directive means that we don't have to insert the password if we already have the certificate). Optionally if a trusted \glsxtrfull{pki} is available we can use that to sign those certificates.
 
-We also need to create a Diffie-Hellman\cite{diffie-hellman} key (used in the key exchange process) with \verb|easyrsa gen-dh| and a \glsxtrshort{hmac}\cite{hmac} signature to strengthen the \glsxtrshort{tls} certificate integrity\cite{https://www.vultr.com/docs/how-to-create-an-openvpn-server-on-ubuntu-20-04/}
+We also need to create a Diffie-Hellman\cite{diffie-hellman} key (used in the key exchange process) with \verb|easyrsa gen-dh| and a \glsxtrshort{hmac}\cite{hmac} signature to strengthen the \glsxtrshort{tls} certificate integrity\cite{vultr}
 
 After that we just need to install those keys into the server, copy the server configuration file sample from \\
 \verb|/usr/share/doc/openvpn/examples/sample-config-files/server.conf| (or\\ any corresponding doc folder for non Debian-based operating systems), modify it such that it points to the correct certificates and keys and since we want gateway redirection we also need to add the \\ \verb|push "redirect-gateway def1 bypass-dhcp"| directive. This way the client will use the \glsxtrshort{vpn} as a gateway instead of the internal Firewall.
