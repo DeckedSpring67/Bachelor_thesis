@@ -399,7 +399,7 @@ Since \glsxtrfull{arp} is used to associate a network device MAC address with it
 
 An \glsxtrshort{https} proxy is a server application that acts as an intermediary between a client and a \glsxtrshort{ssl} encrypted website.
 
-If used together with a spoofer, in our case an \glsxtrshort{arp} Spoofer, every \glsxtrshort{https} traffic in the network will be redirected to the attacker allowing them to modify the resource at will.
+If used together with a spoofer, in this case an \glsxtrshort{arp} Spoofer, every \glsxtrshort{https} traffic in the network will be redirected to the attacker allowing them to modify the resource at will.
 
 It works exactly like an \glsxtrshort{https} server so it also needs its own \glsxtrshort{ssl}/\glsxtrshort{tls} certificates, when used in a Network Attack they're usually forged to seem legitimate.
 
@@ -519,7 +519,7 @@ Since the hosts outside of the internal network have no way to know where the so
 
 With Decryption enabled, the firewall connects to the server as the client would, representing it, and uses its own certificates to encrypt the connection between itself and the client making it so that the client believes to communicate directly with the server in a transparent way.
 
-In order to do that we must generate our self signed certificate, and enable the option to Forward Trusted and/or Untrusted Certificates along with checking the Trusted Root CA box.
+In order to do that we must generate the  self signed certificate, and enable the option to Forward Trusted and/or Untrusted Certificates along with checking the Trusted Root CA box.
 
 \begin{figure}[!hb]
 \centering
@@ -699,7 +699,7 @@ Scapy is an all-in-one tool for packet manipulation.
 
 Since it uses Python as a command board it's also possible to create a Python script to create more advanced attacks.
 
-In our case we'll use it to create the \glsxtrshort{arp} Spoof attack.
+In this case we'll use it to create the \glsxtrshort{arp} Spoof attack.
 
 \begin{figure}[h!]
  \centering
@@ -714,7 +714,7 @@ In our case we'll use it to create the \glsxtrshort{arp} Spoof attack.
 
 \section{Setting up ARP Spoofing}
 
-First of all we need to write our python script to make use of scapy.
+First of all we need to write a python script to make use of scapy.
 
 The idea is to forge a malign \glsxtrshort{arp} packet where we tell that the gateway's \glsxtrshort{ip} address corresponds the attacker machine and from the gateway (the firewall in this case) point of view the victim is replaced by the attacker instead.
 
@@ -1010,7 +1010,7 @@ Since we have generated a \glsxtrshort{ca} earlier through \glsxtrshort{panos} w
 As a means to create those certificates the Open Source tool Easy-RSA\cite{easyrsa} provided by OpenVPN has been used.
 
 After generating a \glsxtrfull{pki} with the command \\
-\verb|easyrsa init-pki|, we can put our \glsxtrshort{panos} certificate and private key respectively in the \verb|pki/| and \verb|pki/private| folders. Once done, we can generate the server public/private keys with \verb|easyrsa gen-req vpnserver nopass|  and \\
+\verb|easyrsa init-pki|, we can put the\glsxtrshort{panos} certificate and private key respectively in the \verb|pki/| and \verb|pki/private| folders. Once done, we can generate the server public/private keys with \verb|easyrsa gen-req vpnserver nopass|  and \\
 \verb|easyrsa gen-req vpnclient nopass| (the \verb|nopass| directive means that we don't have to insert the password if we already have the certificate). Optionally if a trusted \glsxtrfull{pki} is available we can use that to sign those certificates.
 
 We also need to create a Diffie-Hellman\cite{diffie-hellman} key (used in the key exchange process) with \verb|easyrsa gen-dh| and a \glsxtrshort{hmac}\cite{hmac} signature\cite{vultr}.
@@ -1056,11 +1056,11 @@ As far as \glsxtrshort{ssl} Inspection goes, the traffic between the \glsxtrshor
 
 As shown in this paper, \glsxtrshort{ngfw} provide an excellent suite of tools that provide added security.
 
-\glsxtrshort{ssl} Inspection makes it so that traffic can be inspected through the firewall, preventing threats and malware in virtually any setting, even on encrypted connections.
+\glsxtrshort{ssl} Inspection makes it so that traffic can be inspected through the firewall, preventing threats and malware, even on encrypted connections.
 
-It can also be used as a weak point for an attacker to pry on: by creating a \glsxtrshort{mitm} attack and forging/stealing a seemingly trustful certificate it's possible to interfere with communication between the client and the firewall and deploy malign payloads.
+However \glsxtrshort{ssl} Inspection can also be used as a weak point for an attacker to pry on: by creating a \glsxtrshort{mitm} attack and forging/stealing a seemingly trustful certificate it's possible to interfere with communication between the client and the firewall and deploy malign payloads.
 
-Thankfully Palo Alto Networks provides a \glsxtrshort{ngfw} solution that is very extensible and either through an integrated \glsxtrshort{vpn} solution, through its Zone Protection features  or by installing it alongside another firewall, it's able to render \glsxtrshort{mitm} attacks almost worthless.
+Thankfully Palo Alto Networks provides a \glsxtrshort{ngfw} solution that is easily extensible and either through an integrated \glsxtrshort{vpn} solution, through its Zone Protection features  or by installing it alongside another firewall, it's able to render \glsxtrshort{mitm} attacks almost worthless.
 
 \newpage
 \cleardoublepage
